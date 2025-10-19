@@ -14,7 +14,7 @@
     "laravel/tinker": "^2.10.1"
     },
     "require-dev": {
-    "pestphp/pest": "^2.4",
+    "pestphp/pest": "^3.0",
     "pestphp/pest-plugin-laravel": "^3.0",
     "nunomaduro/collision": "^8.6",
     "fakerphp/faker": "^1.23",
