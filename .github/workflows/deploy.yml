@@ -41,9 +41,23 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH }}
-            git pull origin main
-            composer install --no-dev --optimize-autoloader --no-interaction
+            # Check if directory exists and has git repo
+            if [ ! -d "${{ secrets.DEPLOY_PATH }}/.git" ]; then
+              echo "Repository not found. Cloning..."
+              rm -rf ${{ secrets.DEPLOY_PATH }}
+              git clone https://github.com/Dino-16/programmers-space.git ${{ secrets.DEPLOY_PATH }}
+              cd ${{ secrets.DEPLOY_PATH }}
+              composer install --no-dev --optimize-autoloader --no-interaction
+              cp .env.example .env
+              php artisan key:generate
+            else
+              echo "Repository exists. Pulling latest changes..."
+              cd ${{ secrets.DEPLOY_PATH }}
+              git pull origin main
+              composer install --no-dev --optimize-autoloader --no-interaction
+            fi
+            
+            # Run Laravel commands
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
