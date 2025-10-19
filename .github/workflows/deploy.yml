@@ -41,10 +41,13 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /var/www/html
+            cd ${{ secrets.DEPLOY_PATH }}
             git pull origin main
-            composer install --no-dev --optimize-autoloader
+            composer install --no-dev --optimize-autoloader --no-interaction
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+            php artisan storage:link
+            chmod -R 755 storage bootstrap/cache
+            chown -R nobody:nobody storage bootstrap/cache
