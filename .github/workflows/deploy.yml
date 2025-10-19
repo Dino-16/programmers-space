@@ -24,6 +24,11 @@ jobs:
       - name: 📦 Install Composer Dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: 🔑 Setup Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
       - name: 🧪 Run Laravel Tests
         run: php artisan test
 
