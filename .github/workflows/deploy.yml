@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   laravel-deploy:
@@ -33,6 +34,7 @@ jobs:
         run: php artisan test
 
       - name: 🚀 Deploy to Production via SSH
+        if: github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SSH_HOST }}
